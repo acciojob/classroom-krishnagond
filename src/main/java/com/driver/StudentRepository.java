@@ -21,16 +21,15 @@ public class StudentRepository {
         String teacherName = teacher.getName();
         teacherHashMap.put(teacherName, teacher);
     }
-    public void addStudentTeacherPair(String teacherName, String studentName){
-        List<String> studentList = new ArrayList<>();
-        if(teacherStudentHashMap.containsKey(teacherName)){
-            studentList = teacherStudentHashMap.get(teacherName);
-            studentList.add(studentName);
-            teacherStudentHashMap.put(teacherName, studentList);
-        }
-        else{
-            studentList.add(studentName);
-            teacherStudentHashMap.put(teacherName, studentList);
+    public void addStudentTeacherPair(String teacher, String student){
+        if (teacherStudentHashMap.containsKey(teacher)){
+            List<String> teacher_list = teacherStudentHashMap.get(teacher);
+            teacher_list.add(student);
+            teacherStudentHashMap.put(teacher,teacher_list);
+        }else {
+            List<String> teacher_list = new ArrayList<>();
+            teacher_list.add(student);
+            teacherStudentHashMap.put(teacher,teacher_list);
         }
     }
     public Student getStudentByName(String studentName){
@@ -63,34 +62,21 @@ public class StudentRepository {
         }
         return studentList;
     }
-    public void deleteTeacherByName(String teacherName){
-        List<String> studentList = new ArrayList<>();
-        if(teacherStudentHashMap.containsKey(teacherName)){
-            studentList = teacherStudentHashMap.get(teacherName);
-            for (String student : studentList){
-                if(studentHashMap.containsKey(student)){
-                    studentHashMap.remove(student);
-                }
-            }
-            if(teacherHashMap.containsKey(teacherName)){
-                teacherHashMap.remove(teacherName);
-            }
-            teacherStudentHashMap.remove(teacherName);
+    public void deleteTeacherByName(String teacher){
+        List<String> student_list = teacherStudentHashMap.get(teacher);
+        for (String s: student_list){
+            studentHashMap.remove(s);
         }
+        teacherHashMap.remove(teacher);
+        teacherStudentHashMap.remove(teacher);
     }
     public void deleteAllTeachers(){
-        teacherHashMap = new HashMap<>();
-        HashSet<String> studentSet = new HashSet<>();
-        for(String tName : teacherStudentHashMap.keySet()){
-            for(String sName : teacherStudentHashMap.get(tName)){
-                studentSet.add(sName);
+        for (List<String> student_list: teacherStudentHashMap.values()){
+            for (String s: student_list){
+                studentHashMap.remove(s);
             }
         }
-        for(String sName : studentSet){
-            if(studentHashMap.containsKey(sName)){
-                studentHashMap.remove(sName);
-            }
-        }
-        teacherStudentHashMap = new HashMap<>();
+        teacherHashMap.clear();
+        teacherStudentHashMap.clear();
     }
 }

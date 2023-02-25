@@ -21,7 +21,7 @@ public class StudentController {
     @Autowired
     StudentService studentService;
     @PostMapping("/add-student")
-    public ResponseEntity<String> addStudent(@RequestBody() Student student){
+    public ResponseEntity<String> addStudent(@RequestBody Student student){
         studentService.addStudent(student);
         return new ResponseEntity<>("New student added successfully", HttpStatus.CREATED);
     }
